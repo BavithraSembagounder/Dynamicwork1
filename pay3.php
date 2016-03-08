@@ -35,6 +35,63 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+  <script>
+			function getXMLHTTP()
+			{
+				var xmlhttp=false;
+				try
+				{
+					xmlhttp= new XMLHttpRequest();
+				}
+				catch(e)
+				{
+					try
+					{
+						xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					catch(e)
+					{
+						try
+						{
+							xmlhttp=new ActiveXObject("Msxml2.XMLHTTP");
+						}
+						catch(e1)
+						{
+							xmlhttp=false;
+						}
+					}
+				}
+				return xmlhttp;
+			}
+
+			function menu(val1)
+			{
+				var strURL="attendance_emp.php?sub="+val1; 
+				var req = getXMLHTTP();
+				if (req) 
+				{
+					req.onreadystatechange = function() 
+					{
+						if (req.readyState == 4) 
+						{
+							// only if "OK" 
+							if (req.status == 200) 
+							{	
+								document.getElementById('detail').innerHTML=req.responseText;					
+							} else 
+							{
+								alert("There was a problem while using XMLHTTP:\n" + req.statusText);
+							}
+						}				
+					}			
+					req.open("GET", strURL, true);
+					req.send(null);
+				}	
+			}
+
+		</script>
+
+  
   </head>
   <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -49,6 +106,32 @@ if(isset($_POST['submit']))
 ?>
 
 <?php include"head.php"; ?>
+<?php
+if(isset($_POST['submit']))
+{
+$date_from =$_POST['from_date'];
+$date_to = $_POST['to_date'];
+print_r(list_days($date_from,$date_to));
+}
+function list_days($date_from,$date_to){
+    $arr_days = array();
+    $day_passed = ($date_to - $date_from); //seconds
+    $day_passed = ($day_passed/86400); //days
+
+    $counter = 1;
+    $day_to_display = $date_from;
+    while($counter < $day_passed){
+        $day_to_display += 86400;
+        //echo date("F j, Y \n", $day_to_display);
+        $arr_days[] = date('o-m-d',$day_to_display);
+        $counter++;
+    }
+
+    return $arr_days;
+	echo " $arr_days";
+}
+
+?>
 
       
       <!-- Left side column. contains the logo and sidebar -->
@@ -84,16 +167,70 @@ if(isset($_POST['submit']))
                   <h3 class="box-title"></h3>
                 </div>
                 <div class="box-body">
-                  <!-- Date range -->
+				<form action="pay3.php" method="post">
+				<table>
+				 <!-- Date range 
                   <div class="form-group">
                     <label>Select Date range:</label>
                     <div class="input-group">
                       <div class="input-group-addon" width="40%">
                         <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" class="form-control pull-right" id="reservation">
-                    </div><!-- /.input group -->
+                      <input type="text" class="form-control pull-right" id="reservation" name="date" >
+                    </div>--><!-- /.input group -->
                   </div><!-- /.form group -->
+				<td align=right><label><h4>From Date </h4></label></td>
+															<td>
+																<div id="datepicker" class="input-group date" data-provide="datepicker" style="width:70%">
+																<input type="date" class="form-control" name="from_date">
+															</td>	
+													</tr>
+													<tr>
+															<td align=right><label><h4>To Date </h4></label></td>
+															<td>
+																<div id="datepicker" class="input-group date" data-provide="datepicker" style="width:70%">
+																<input type="date" class="form-control" name="to_date">
+															</td>	
+													</tr>
+													<!--<tr>
+													<td><label><h4>Type of service </h4></label></td>
+													<td>
+												
+													<select name="type_service" id="type_service" OnChange="menu(this.value)">
+													<option value=""> -Select main Service- </option>
+										<?php
+											$sql=mysql_query("select * from main_category");
+											while($row=mysql_fetch_assoc($sql))
+											{
+												?>
+												<option value="<?php echo $row['Id']; ?>"><?php echo $row['categoty_main'];?></option>
+												<?php 
+											} 
+										?>
+													</select>
+													</td></tr>-->
+													<tr><td><h4><center><input type="submit" name="submit" value="Submit"></h4></center></td>
+<td><h4><center><input type="reset" name="reset" value="Reset"></h4></center></td></tr>
+
+													<tr>
+													<td><label><h4>Employee Name </h4></label>
+													<td><select name="emp_name" id="emp_name" >
+													 <option value="">-Select employee name-</option>
+													 <?php
+                                                     $sql=mysql_query("select * from attendance,payment perdate=from-date");
+                                                     while($row=mysql_fetch_assoc($sql))
+                                                         {?>
+                                                  <option value="<?php echo $row['id']; ?>"><?php echo $row['emp_name'];?></option>
+                                                   <?php } ?>
+
+													</select>
+													
+													</td>
+													</td>
+													</tr>
+													
+													</table>
+                 
 
                   <!-- Date and time range -->
                   <!--<div class="form-group">
