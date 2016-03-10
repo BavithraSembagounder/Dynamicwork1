@@ -64,7 +64,7 @@
 				return xmlhttp;
 			}
 
-			function menu(val1)
+			function menu1(val1)
 			{
 				var strURL="attendance_emp.php?sub="+val1; 
 				var req = getXMLHTTP();
@@ -106,34 +106,6 @@ if(isset($_POST['submit']))
 ?>
 
 <?php include"head.php"; ?>
-<?php
-if(isset($_POST['submit']))
-{
-$date_from =$_POST['from_date'];
-$date_to = $_POST['to_date'];
-print_r(list_days($date_from,$date_to));
-}
-function list_days($date_from,$date_to){
-    $arr_days = array();
-    $day_passed = ($date_to - $date_from); //seconds
-    $day_passed = ($day_passed/86400); //days
-
-    $counter = 1;
-    $day_to_display = $date_from;
-    while($counter < $day_passed){
-        $day_to_display += 86400;
-        //echo date("F j, Y \n", $day_to_display);
-        $arr_days[] = date('o-m-d',$day_to_display);
-        $counter++;
-    }
-
-    return $arr_days;
-	echo " $arr_days";
-}
-
-?>
-
-      
       <!-- Left side column. contains the logo and sidebar -->
      
       <!-- Content Wrapper. Contains page content -->
@@ -189,38 +161,19 @@ function list_days($date_from,$date_to){
 															<td align=right><label><h4>To Date </h4></label></td>
 															<td>
 																<div id="datepicker" class="input-group date" data-provide="datepicker" style="width:70%">
-																<input type="date" class="form-control" name="to_date">
+																<input type="date" class="form-control" name="to_date" onClick="menu1(this.value)">
 															</td>	
 													</tr>
-													<!--<tr>
-													<td><label><h4>Type of service </h4></label></td>
-													<td>
-												
-													<select name="type_service" id="type_service" OnChange="menu(this.value)">
-													<option value=""> -Select main Service- </option>
-										<?php
-											$sql=mysql_query("select * from main_category");
-											while($row=mysql_fetch_assoc($sql))
-											{
-												?>
-												<option value="<?php echo $row['Id']; ?>"><?php echo $row['categoty_main'];?></option>
-												<?php 
-											} 
-										?>
-													</select>
-													</td></tr>-->
-													<tr><td><h4><center><input type="submit" name="submit" value="Submit"></h4></center></td>
-<td><h4><center><input type="reset" name="reset" value="Reset"></h4></center></td></tr>
-
+													<tr><td><h4><center><input type="button" name="search" value="search" onClick="menu1(this.value)"></center></h4></td>
 													<tr>
 													<td><label><h4>Employee Name </h4></label>
 													<td><select name="emp_name" id="emp_name" >
 													 <option value="">-Select employee name-</option>
 													 <?php
-                                                     $sql=mysql_query("select * from attendance,payment perdate=from-date");
+                                                     $sql=mysql_query("select * from attendance,payment where attendance.perdate BETWEEN payment.from_date AND payment.to_date");
                                                      while($row=mysql_fetch_assoc($sql))
                                                          {?>
-                                                  <option value="<?php echo $row['id']; ?>"><?php echo $row['emp_name'];?></option>
+                                                  <option value="<?php echo $row['emp_name']; ?>"><?php echo $row['emp_name'];?></option>
                                                    <?php } ?>
 
 													</select>
