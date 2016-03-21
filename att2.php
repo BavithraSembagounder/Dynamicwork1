@@ -2,13 +2,17 @@
 <html>
   <head>
 	<link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+
+
   </head>
+		
   <?php
 $con=mysql_connect("localhost","root","");
 mysql_select_db("dwa",$con);
 if(isset($_POST['submit']))
 {
-$query=mysql_query("insert into attendance(id,location,perdate) VALUES ('".$_POST['id']."','".$_POST['location']."',NOW())");
+//$query=mysql_query("insert into att(emp_id,status,perdate) VALUES ('".$_POST['emp_id']."','".$_POST['status']."',NOW())");
+//echo"insert into attendance1(emp_id,location,out_time,perdate) VALUES ('".$_POST['emp_id']."','".$_POST['location']."','".$_POST['out_time']."',NOW())";
 //echo"Submittedted successfully";
 
 }
@@ -41,9 +45,11 @@ $query=mysql_query("insert into attendance(id,location,perdate) VALUES ('".$_POS
                 </div><!-- /.box-header -->
                 <div class="box-body">
 				<div class="form-group">
-
-<form name="attendance" action="att1.php" method="post" onSubmit="return check(this)">
+				<form name="attendance" action="editatt2.php" method="post" onSubmit="return check(this)">
 <table align="center" class="table table-hover">
+
+
+<div>
 
 <tr><td><label><h4><font size="3" face="arial" color="red">*</font>Service type</h4></label></td>
 <td><select name="main_category" id="main_cat" required>
@@ -61,21 +67,6 @@ $query=mysql_query("insert into attendance(id,location,perdate) VALUES ('".$_POS
 										</td>
 										</tr>
 
-<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Emp Id</h4></label></td>
-<td><input type="text" size="35px" name="id" id="id" required></td></tr>
-<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Location</h4></label></td><td><input type="text" size="35px" name="location" id="location" required></td></tr>
-<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Entry Type</h4></label></td>
-<td><input type="radio" name="group" value="Intime" checked> Intime
- <input type="radio" name="group" value="Outtime"> Outtime</td>
-
-
-<!--<tr><td><label><h4><font size="3" face="arial" color="red">*</font>In time</h4></label></td><td><input type="time" size="35px" name="in_time" id="in_time" required></td></tr>-->
-
-<tr>
-                	<td><label><h4><font size="3" face="arial" color="red">*</font>Per date</h4></label></td>
-                    <td><input type="text" name="txtdate" value="<?php echo date("d/M/Y"); ?>" readonly="readonly" /></td>
-                </tr>
-
 <!--<div class="input-group date" data-provide="timepicker" style="width:70%">
                           <input type="text" class="form-control" id="app" required>
                         <div class="input-group-addon">
@@ -84,9 +75,29 @@ $query=mysql_query("insert into attendance(id,location,perdate) VALUES ('".$_POS
                      </div></tr></td>-->
 
 					 <script src="plugins/datepicker/bootstrap-datepickerpicker"></script>
-<tr><td><h4><center><input type="submit" name="submit" value="Submit"></h4></center></td>
-<td><h4><center><input type="reset" name="reset" value="Reset"></h4></center></td></tr>
+<tr><td><h4><input type="submit" name="submit" value="Submit"></h4></td>
+<table id="example2" class="table table-bordered table-hover">
+<tr>
+									<td bgcolor="66CCFF"><b>Id</b></td>
+									<td bgcolor="66CCFF"><b>Name</b></td>
+									<td bgcolor="66CCFF"><b>Status</b></td>
+									<td bgcolor="66CCFF"><b>Edit</b></td>
+								</tr>
+			<?php
+$sql=mysql_query("SELECT * from workersdetail");
+while($row=mysql_fetch_assoc($sql))
+{
+?>
+<tr>
 
+<td><?php echo $row['emp_id']; ?></td>
+<td><?php echo $row['name']; ?></td>
+<td><?php echo 'empty'; ?></td>
+<td><a href="editatt2.php?did=<?php echo $row['id']; ?>">Edit</a></td>
+</tr>
+<?php } ?>
+
+</div>
 </form>
 </table>
  </div><!-- /.box-body -->
