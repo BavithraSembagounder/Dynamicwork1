@@ -1,141 +1,168 @@
-<!DOCTYPE html>
-
-<html>
-<head>
-
-	<link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
-	<script src="plugins/datepicker/bootstrap-datepicker.js"></script>
 <?php
-	$con=mysql_connect("localhost","root","");
-	mysql_select_db("dwa",$con);
-
+error_reporting(0);
+include("config.php");
 ?>
-		<script>
-			function getXMLHTTP()
-			{
-			var xmlhttp=false;
-				try
-				{
-				xmlhttp= new XMLHttpRequest();
-				}
-				catch(e)
-				{
-					try
-					{
-					xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
-					}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>search</title>
 
-					catch(e)
-					{
-						try
-						{
-						xmlhttp=new ActiveXObject("Msxml2.XMLHTTP");
-						}
-						catch(e1)
-						{
-						xmlhttp=false;
-						}
-					}
-				}
-				return xmlhttp;
-			}
+<style>
 
-			function attendance(val)
-			{
-				
-				var strURL="attendance.php?att="+val; 
-				
-				var req = getXMLHTTP();
-				if (req) 
-				{
-					req.onreadystatechange = function() 
-					{
-						if (req.readyState == 4) {
-							// only if "OK" 
-							if (req.status == 200) {	
-								document.getElementById('detail').innerHTML=req.responseText;					
-							} else {
-								alert("There was a problem while using XMLHTTP:\n" + req.statusText);
-							}
-						}				
-					}			
-					req.open("GET", strURL, true);
-					req.send(null);
-				}	
-			}
-		</script>
-		</head>
+BODY, TD {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+</style>
+</head>
 <body>
 <?php include "head.php"; ?>
 	<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
-			<h1>Booking</h1>        
+			<h1>Booking Approval</h1>        
+		       
 		</section>
 
 		<!-- Main content -->
 		<section class="content">
-		
 			<div class="row">
 				<!-- left column -->
 				<div class="col-xs-12">
 					<!-- general form elements -->
 					<div class="box box-primary">
 						<div class="box-header with-border">
-							<h5 class="box-title">
-								&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-								&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-								&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-								&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Booking Approval
-							</h5>
+							<h3 class="box-title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+							&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+							&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<font color="CC33CC"><b><i>Booking Approval Details List</i></b></font></h3>
 						</div><!-- /.box-header -->
 						<!-- form start -->
 						<!--<form role="form">-->
 						<div class="box-body">
-									<form name="book_approve" action="approval.php" method="post" >
-									<table align="center">
-										<div>
-											<!--<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Emp Id</h4></label></td><td><input type="text" size="35px" name="emp_id" id="emp_id" required></td></tr>-->
-											<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Customer Name</h4></label></td><td><input type="text" size="35px" name="name" id="name" required></td></tr>
-											<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Required Date</h4></label></td><td><input type="date" size="35px" name="req_date" id="req_date" required></td>
-											<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Status</h4></label></td><td><select name="status" id="sta" required>
-											<option>---Status---</option>
-											<option> Waiting for approval</option>
-											</select></td></tr>
-											<tr><td><label><h4><font size="3" face="arial" color="red">*</font>Service person</h4></label></td>
-										<td><select name="name" onchange="attendance(this.value)">
-										<option value="">--Select Employee--</option>
-										<?php
-											$sql=mysql_query("select *  from workersdetail");
-											while($row=mysql_fetch_assoc($sql))
-											{
-												?>
-												<option value="<?php echo $row['emp_id']; ?>"><?php echo $row['name']; ?></option>
-												<?php 
-											} 
-										?>
-									</select>
-										</td></tr>
-											<tr><td><label><h4><font size="3" face="arial" color="red">*</font>contact Number</h4></label></td><td><input type="text" size="35px" name="out_time" id="out_time" required></td></tr>
-											<tr><td><h4><center><input type="submit" name="submit" value="Submit"></h4></center></td>
-											<td><h4><center><input type="reset" name="reset" value="Reset"></h4></center></td></tr>
-											</table>
-								<table id="example2" class="table table-bordered table-hover">
-<tr>
-<th bgcolor="66CCFF">Customer name</th>
-<th bgcolor="66CCFF">Contact Number</th>
-<th bgcolor="66CCFF">Address</th>
-<th bgcolor="66CCFF">Landmark</th>
-<th bgcolor="66CCFF">Requirements</th>
-<th bgcolor="66CCFF">Required Date</th>
-<th bgcolor="66CCFF">Show</th>
-<th bgcolor="66CCFF">Delete</th>
-</tr>
-</table>
+
+<form id="form1" name="form1" method="post" action="approval.php">
+
+	<label for="from">From</label>
+<input name="from" type="text" id="from" size="10" value="<?php echo $_REQUEST["from"]; ?>" />
+	<label for="to">to</label>
+<input name="to" type="text" id="to" size="10" value="<?php echo $_REQUEST["to"]; ?>"/>
+
+<input type="submit" name="button" id="button" value="Filter" />
+  </label>
+  <a href="approval.php"> 
+  reset</a>
+</form>
+    <a href="hom1.php"> Back </a>
+<br /><br />
+<table id="example2" class="table table-bordered table-hover">
+  <tr>
+      <td bgcolor="66CCFF"><strong>Id</strong></td>
+    <td bgcolor="66CCFF"><strong>Name</strong></td>
+ <td bgcolor="66CCFF"><strong>Address</strong></td>
+    <td bgcolor="66CCFF"><strong>City</strong></td>
+    <td bgcolor="66CCFF"><strong>Mobile</strong></td>
+    <td bgcolor="66CCFF"><strong>E-Mail</strong></td>
+    <td bgcolor="66CCFF"><strong>Category</strong></td>
+	    <td bgcolor="66CCFF"><strong>Subategory</strong></td>
+    <td bgcolor="66CCFF"><strong>Remark</strong></td>
+    <td bgcolor="66CCFF"><strong>From date</strong></td>
+    <td bgcolor="66CCFF"><strong>To date</strong></td>
+    <td bgcolor="66CCFF"><strong>Booking</strong></td>
+    <td bgcolor="66CCFF"><strong>Status</strong></td>
+	    <td bgcolor="66CCFF"><strong>Service Person Allocation</strong></td>
+     </tr>
+<?php
+
+if ($_REQUEST["string"]<>'') 
+{
+	$search_string = " AND (status LIKE '%".mysql_real_escape_string($_REQUEST["string"])."%' OR booking LIKE '%".mysql_real_escape_string($_REQUEST["string"])."%')";	
+}
+if ($_REQUEST["area"]<>'') 
+{
+	$search_city = " AND area='".mysql_real_escape_string($_REQUEST["area"])."'";	
+}
+
+
+
+
+if ($_REQUEST["from"]<>'' and $_REQUEST["to"]<>'') 
+{
+	$sql = "SELECT * FROM ".$SETTINGS["data_table"]." WHERE from_date >= '".mysql_real_escape_string($_REQUEST["from"])."' AND to_date <= '".mysql_real_escape_string($_REQUEST["to"])."'".$search_string.$search_city;
+} 
+else if ($_REQUEST["from"]<>'') 
+{
+	$sql = "SELECT * FROM ".$SETTINGS["data_table"]." WHERE from_date >= '".mysql_real_escape_string($_REQUEST["from"])."'".$search_string.$search_city;
+} 
+else if ($_REQUEST["to"]<>'') 
+{
+	$sql = "SELECT * FROM ".$SETTINGS["data_table"]." WHERE to_date <= '".mysql_real_escape_string($_REQUEST["to"])."'".$search_string.$search_city;
+} 
+else {
+	$sql = "SELECT * FROM ".$SETTINGS["data_table"]." WHERE id>0".$search_string.$search_city;
+     }
+
+$sql_result = mysql_query ($sql, $connection ) or die ('request "Could not execute SQL query" '.$sql);
+if (mysql_num_rows($sql_result)>0) {
+	while ($row = mysql_fetch_assoc($sql_result)) {
+?>
+  <tr>
+<td><?php echo $row["id"]; ?></td>  
+<td><?php echo $row["full_name"]; ?></td>
+<td><?php echo $row["address"]; ?></td>
+<td><?php echo $row["area"]; ?></td>
+<td><?php echo $row["mobile"]; ?></td>
+<td><?php echo $row["email"]; ?></td>
+<td><?php echo $row["categoty_main"]; ?></td>
+<td><?php echo $row["category_sub1"]; ?></td>
+<td><?php echo $row["remark"]; ?></td>
+<td><?php echo $row["from_date"]; ?></td>
+<td><?php echo $row["to_date"]; ?></td>
+<td><?php echo $row["booking"]; ?></td>
+ <td><?php echo $row["status"]; ?></td>
+  <td><a href="checkserper.php?did=<?php echo $row['id']; ?>">Check</a></td>
+     
+  </tr>
+<?php
+	}
+} else {
+?>
+<tr><td colspan="13">No results found.</td>
+<?php	
+}
+?>
 </table>
 </form>
-</div>
+
+<script>
+	$(function() {
+		var dates = $( "#from, #to" ).datepicker({
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 2,
+			dateFormat: 'yy-mm-dd',
+			onSelect: function( selectedDate ) {
+				var option = this.id == "from" ? "minDate" : "maxDate",
+					instance = $( this ).data( "datepicker" ),
+					date = $.datepicker.parseDate(
+						instance.settings.dateFormat ||
+						$.datepicker._defaults.dateFormat,
+						selectedDate, instance.settings );
+				dates.not( this ).datepicker( "option", option, date );
+			}
+		});
+	});
+	</script>
+	
+							<!--</thead>-->
+							<tbody>
+					      
+							</tbody>
+
+
+
+						</div>
 					</div>      
 					<!--</form>-->
 				</div>
@@ -144,6 +171,6 @@
 	</div>
 	<!-- /.box -->
 	<?php include "navigation.php"; ?>
-	<?php include "footer.php"; ?>	
+	<?php include "footer.php"; ?>
 </body>
 </html>
